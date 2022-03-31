@@ -21,9 +21,7 @@ echo
 
 addrich=$(echo 'firewall-cmd --permanent --add-rich-rule="rule family="ipv4" source address="')
 rmrich=$(echo 'firewall-cmd --permanent --remove-rich-rule="rule family="ipv4" source address="')
-ssh2200=$(echo '" service name="ssh-2200" accept"')
-bitwolf=$(echo '" service name="transmission-bitwolf" accept"')
-webmin=$(echo '" port port="16868" protocol="tcp" accept"')
+ssh=$(echo '" service name="ssh" accept"')
 
 # For quit feature.
 if [[ ${feature_choose} == Q || ${feature_choose} == q ]];
@@ -35,26 +33,18 @@ case ${feature_choose} in
 	1 )
 		read -p "$(echo -e "Enter ${Y}old${E} rules IP: ")" oldip
 		read -p "$(echo -e "Enter ${Y}new${E} rules IP: ")" newip
-		${addrich}${newip}${ssh2200}
-		${addrich}${newip}${bitwolf}
-		${addrich}${newip}${webmin}
-		${rmrich}${oldip}${ssh2200}
-		${rmrich}${oldip}${bitwolf}
-		${rmrich}${oldip}${webmin}
+		${addrich}${newip}${ssh}
+		${rmrich}${oldip}${ssh}
 		;;
 
 	2 )
 		read -p "$(echo -e "Enter the IP to be ${G}added${E} rules: ")" addip
-		${addrich}${addip}${ssh2200}
-		${addrich}${addip}${bitwolf}
-		${addrich}${addip}${webmin}
+		${addrich}${addip}${ssh}
 		;;
 
 	3 )
 		read -p "$(echo -e "Enter the IP to be ${R}remove${E} rules: ")" rmip
-		${rmrich}${rmip}${ssh2200}
-		${rmrich}${rmip}${bitwolf}
-		${rmrich}${rmip}${webmin}
+		${rmrich}${rmip}${ssh}
 		;;
 esac
 
