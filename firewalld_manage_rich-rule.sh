@@ -12,9 +12,9 @@ E="\e[0m"
 
 # Select feature
 read -p "
-$(echo -e "${Y}1${E} > ${G}Replace rules.${E}")
-$(echo -e "${Y}2${E} > ${R}Add ${E}${G}rules.${E}")
-$(echo -e "${Y}3${E} > ${R}Remove ${E}${G}rules.${E}")
+$(echo -e "${Y}1${E} > ${G}Replace rules${E}")
+$(echo -e "${Y}2${E} > ${R}Add ${E}${G}rules${E}")
+$(echo -e "${Y}3${E} > ${R}Remove ${E}${G}rules${E}")
 $(echo -e "${Y}Q/q${E} > ${G}Quit${E}")
 $(echo -e "${B}What do you want to do this time?(Enter number) >${E}") " feature_choose
 echo
