@@ -1,2 +1,7 @@
-# Firewalld_Manage_rich-rule
-Firewalld add/remove/replace rich rule script
+Firewalld rich-rule manage script
+-----------------------------------------------------------------
+
+### For firewalld service
+
+Screen:  
+![](https://i.imgur.com/HeHkP9V.png)
