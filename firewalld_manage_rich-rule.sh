@@ -19,9 +19,18 @@ $(echo -e "${Y}Q/q${E} > ${G}Quit${E}")
 $(echo -e "${B}What do you want to do this time?(Enter number) >${E}") " feature_choose
 echo
 
-addrich=$(echo 'firewall-cmd --permanent --add-rich-rule="rule family="ipv4" source address="')
-rmrich=$(echo 'firewall-cmd --permanent --remove-rich-rule="rule family="ipv4" source address="')
-ssh=$(echo '" service name="ssh" accept"')
+# function
+add_rule() {
+	firewall-cmd --permanent --add-rich-rule="rule family="ipv4" source address="${addip}" service name="ssh" accept"
+	firewall-cmd --permanent --add-rich-rule="rule family="ipv4" source address="${addip}" service name="transmission-client" accept"
+	firewall-cmd --permanent --add-rich-rule="rule family="ipv4" source address="${addip}" port port="12345" protocol="tcp" accept"
+}
+
+rm_rule() {
+	firewall-cmd --permanent --remove-rich-rule="rule family="ipv4" source address="${rmip}" service name="ssh" accept"
+	firewall-cmd --permanent --remove-rich-rule="rule family="ipv4" source address="${rmip}" service name="transmission-client" accept"
+	firewall-cmd --permanent --remove-rich-rule="rule family="ipv4" source address="${rmip}" port port="12345" protocol="tcp" accept"
+}
 
 # For quit feature.
 if [[ ${feature_choose} == Q || ${feature_choose} == q ]];
@@ -31,30 +40,41 @@ fi
 
 case ${feature_choose} in
 	1 )
-		read -p "$(echo -e "Enter ${Y}old${E} rules IP: ")" oldip
-		read -p "$(echo -e "Enter ${Y}new${E} rules IP: ")" newip
-		${addrich}${newip}${ssh}
-		${rmrich}${oldip}${ssh}
+		read -p "$(echo -e "Enter ${Y}old${E} rules IP: ")" rmip
+		read -p "$(echo -e "Enter ${Y}new${E} rules IP: ")" addip
+		
+		add_rule
+		rm_rule
 		;;
 
 	2 )
 		read -p "$(echo -e "Enter the IP to be ${G}added${E} rules: ")" addip
-		${addrich}${addip}${ssh}
+		
+		add_rule
 		;;
 
 	3 )
 		read -p "$(echo -e "Enter the IP to be ${R}remove${E} rules: ")" rmip
-		${rmrich}${rmip}${ssh}
+		
+		rm_rule
 		;;
 esac
 
-firewall-cmd --list-all
+echo
+echo -e "${Y}Preview${E} ${B}the rules that will be applied:${E}"
+firewall-cmd --list-all --permanent | grep -A100 "rich rules:"
+echo
 
 while read -p "$(echo -e "${B}Do you want to reload firewalld? (Y/N)${E}") " fwreload
 do
 	if [[ ${fwreload} == y || ${fwreload} == Y ]];
 	then
 		firewall-cmd --reload
+
+		echo
+		echo -e "${G}Rules have been applied:${E}"
+		firewall-cmd --list-all
+		exit 0
 	elif [[ ${fwreload} == n || ${fwreload} == N ]];
 	then
 		echo -e "${B}OK, it looks like you still have some concerns...${E}"
