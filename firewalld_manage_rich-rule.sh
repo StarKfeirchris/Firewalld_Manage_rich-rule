@@ -1,4 +1,4 @@
-#/bin/bash
+#!/bin/bash
 
 # Setting the execution environment, always open.
 set -e
